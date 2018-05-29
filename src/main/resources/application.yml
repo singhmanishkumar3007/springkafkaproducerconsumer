@@ -1,0 +1,9 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /myclient
+
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    topicname: manish-test.t    

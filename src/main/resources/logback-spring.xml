@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include
+		resource="org/springframework/boot/logging/logback/base.xml" />
+	<property name="LOG_FILE" value="logs/mykafkaproducerapplication.log" />
+	<property name="FILE_LOG_PATTERN"
+		value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %d %-5level %logger{36} - %msg%n [%X{api-client-ip} -%X{api-request-method}]" />
+
+	<springProfile name="dev,test,default">
+		<include
+			resource="org/springframework/boot/logging/logback/console-appender.xml" />
+		<appender name="ROLLING-FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<encoder>
+				<pattern>${FILE_LOG_PATTERN}</pattern>
+			</encoder>
+			<file>${LOG_FILE}</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+				<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<maxFileSize>10MB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+		</appender>
+
+
+		<root level="INFO">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="ROLLING-FILE" />
+		</root>
+		<logger name="com.tech.boot.myclient" level="DEBUG">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="ROLLING-FILE" />
+		</logger>
+		<logger name="org.apache.kafka" level="WARN">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="ROLLING-FILE" />
+		</logger>
+	</springProfile>
+
+
+
+	<springProfile name="prod">
+		<appender name="ROLLING-FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<encoder>
+				<pattern>${FILE_LOG_PATTERN}</pattern>
+			</encoder>
+			<file>${LOG_FILE}</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+				<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<maxFileSize>10MB</maxFileSize>
+				</timeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+		</appender>
+
+		<root level="ERROR">
+			<appender-ref ref="ROLLING-FILE" />
+		</root>
+		<logger name="com.tech.boot.myclient" level="DEBUG">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="ROLLING-FILE-1" />
+		</logger>
+	</springProfile>
+
+</configuration>
