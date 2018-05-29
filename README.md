@@ -25,7 +25,7 @@ Rename file D:\softwares\kafka-new\zookeeper-3.4.10\zookeeper-3.4.10\conf\zoo_sa
 Now, in the command prompt, enter the command zkserver and the zookeeper is up and running on http://localhost:2181 </br>
 
 
-<b> Kafka Setup On windows - <b> </br>
+<b> Kafka Setup On windows - </b> </br>
 </br>
 
 Head over to http://kafka.apache.org/downloads.html and download Scala 2.12. This version has scala and zookepper already included in it.
@@ -44,7 +44,7 @@ Since, we have not made any changes in the default configuration, Kafka should b
 
 
 
-<b>Let us create a topic with a name manish-test.t <b> </br>
+<b>Let us create a topic with a name manish-test.t </b> </br>
 </br>
 
 cd D:\softwares\kafka_2.12-1.0.1\bin\windows </br>
@@ -97,7 +97,7 @@ that implements the org.apache.kafka.common.serialization.Serializer interface.<
 </br>
 
 
-<b> Explanation Of Consumer Code <b> </br>
+<b> Explanation Of Consumer Code </b> </br>
 
 </br>
 
@@ -152,3 +152,23 @@ consumer instances. If all the consumer instances have different consumer groups
 be broadcasted to all the consumer processes.</br> </i></b> 
 </br>
 </br>
+
+<b> Explanation Of Test class .yml file </b>
+  </br>
+  
+  A basic SpringKafkaApplicationTest is provided in order to verify that we are able to send and receive a message to and from Apache Kafka. It contains a testReceiver() unit test case that uses the Sender bean to send a message to the 'manish-test.t' topic on the Kafka bus.  </br>
+
+We then check if the CountDownLatch from the Receiver was lowered from 1 to 0 as this indicates a message was processed by the receive() method.  </br>
+
+An embedded Kafka broker is automatically started by using a @ClassRule. Check out following Spring Kafka test example for more detailed information on this topic.  </br>
+
+As the embedded server is started on a random port, we provide a dedicated src/test/resources/apppication.yml properties file for testing which uses the spring.embedded.kafka.brokers system property that the @ClassRule sets to the address of the broker(s).  </br>
+
+<b><i>kafka: </br>
+  bootstrap-servers: ${spring.embedded.kafka.brokers} </br>
+  topic: </br>
+    topicname: manish-test.t </br>
+  </i></b>
+   </br>
+Below test case can also be executed after you install Kafka and Zookeeper on your local system.  </br>
+<i>Just comment out the @ClassRule and change the 'bootstrap-servers' property of the application properties file located in src/test/resources to the address of the local broker. </i>  </br>
